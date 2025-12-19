@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify   
 from models import Product, User, Cart, db 
-app = Blueprint('shop', __name__)
+app = Blueprint('addtoCart_app', __name__)
 
 @app.route("/cart/<int:user_id>", methods=["GET"])
 def view_cart(user_id):

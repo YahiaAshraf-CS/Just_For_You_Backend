@@ -33,4 +33,15 @@ class Cart(db.Model):
     def __repr__(self):
         return f'<Cart {self.user_id} - {self.product_id}>'
     
-
+class Order(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+    quantity = db.Column(db.Integer, nullable=False)
+    total_price = db.Column(db.Float, nullable=False)
+    order_date = db.Column(db.DateTime, server_default=db.func.now())
+    user = db.relationship('User', backref='orders')
+    product = db.relationship('Product', backref='orders')
+    def __repr__(self):
+        return f'<Order {self.id}>'
+ 

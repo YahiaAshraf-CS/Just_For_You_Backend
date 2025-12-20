@@ -41,6 +41,15 @@ def signup():
     db.session.add(new_user)
     db.session.commit()
 
-    return jsonify({"status": "success", "message": "User registered"}), 201
-
-
+    return jsonify({
+        "status": "success",
+        "message": "User registered",
+        "user": {
+            "id": new_user.id,
+            "firstName": new_user.firstName,
+            "lastName": new_user.lastName,
+            "number": new_user.number,
+            "email": new_user.email,
+            "is_admin": new_user.is_admin
+        }
+    }), 201

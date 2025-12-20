@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify,Blueprint
 from models import Product, db
-app = Blueprint('Dashboard', _name_)
-@app.route("/api/products", methods=["GET"])
+app = Blueprint('Dashboard', __name__)
+@app.route("/products", methods=["GET"])
 def get_products():
     products = Product.query.all()
 
@@ -19,7 +19,7 @@ def get_products():
 
     return jsonify(result), 200
 
-@app.route("/api/products", methods=["POST"])
+@app.route("/products", methods=["POST"])
 def add_product():
     data = request.get_json()
 
@@ -40,7 +40,7 @@ def add_product():
 
     return jsonify({"message": "Product added successfully"}), 201
 
-@app.route("/api/products/<int:product_id>", methods=["PUT"])
+@app.route("/products/<int:product_id>", methods=["PUT"])
 def update_product(product_id):
     product = Product.query.get_or_404(product_id)
     data = request.get_json()
@@ -56,7 +56,7 @@ def update_product(product_id):
 
     return jsonify({"message": "Product updated successfully"}), 200
 
-@app.route("/api/products/<int:product_id>", methods=["DELETE"])
+@app.route("/products/<int:product_id>", methods=["DELETE"])
 def delete_product(product_id):
     product = Product.query.get_or_404(product_id)
 

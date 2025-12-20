@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from werkzeug.security import check_password_hash
 from models import User
 
-app = Blueprint('login', _name_)
+app = Blueprint('login', __name__)
 
 @app.route("/login", methods=["POST"])
 def login():

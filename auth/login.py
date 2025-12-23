@@ -32,6 +32,7 @@ def login():
             "firstName": user.firstName,
             "lastName": user.lastName,
             "number": user.number,
-            "email": user.email
+            "email": user.email,
+            "is_admin": user.is_admin
         }
     }), 200

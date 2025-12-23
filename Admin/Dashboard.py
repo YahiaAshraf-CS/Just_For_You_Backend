@@ -24,8 +24,62 @@ def get_products():
 UPLOAD_FOLDER = 'static/products'
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
+#edit
+UPLOAD_FOLDER = 'static/products'
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
 @app.route("/products", methods=["POST"])
 def add_product():
+    try:
+        # 1. Get text data using request.form
+        name = request.form.get('name')
+        price = request.form.get('price')
+        description = request.form.get('description')
+        stock = request.form.get('stock')
+        category = request.form.get('category')
+
+        # 2. Get the file using request.files
+        if 'image' not in request.files:
+            return jsonify({"status": "error", "message": "No image part"}), 400
+        
+        file = request.files['image']
+        
+        if file.filename == '':
+            return jsonify({"status": "error", "message": "No selected file"}), 400
+
+        if file:
+            # Secure the filename and save it
+            filename = secure_filename(file.filename)
+            save_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+            file.save(save_path)
+
+            # 3. Create the URL to be stored in the database
+            # This allows the React frontend to load the image via a URL
+            image_url = f"http://127.0.0.1:5000/static/products/{filename}"
+
+            # --- DATABASE LOGIC HERE ---
+            new_product = Product(
+                name=name,
+                description=description,
+                price=float(price),
+                stock=int(stock),
+                category=category,
+                image=image_url
+            )
+            db.session.add(new_product)
+            db.session.commit()
+            # ---------------------------
+
+            return jsonify({
+                "status": "success", 
+                "message": "Product added successfully!",
+                "image_path": image_url
+            }), 201
+
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+#finish edit
     try:
         # 1. Get text data using request.form
         name = request.form.get('name')
@@ -95,6 +149,15 @@ def update_product(product_id):
 @app.route("/products/<int:product_id>", methods=["DELETE"])
 def delete_product(product_id):
     product = Product.query.get_or_404(product_id)
+    cart_items = Cart.query.filter_by(product_id=product_id).all()
+    for item in cart_items:
+        db.session.delete(item)
+    wishlist_items = Wishlist.query.filter_by(product_id=product_id).all()
+    for item in wishlist_items:
+        db.session.delete(item)
+    orders = Order.query.filter_by(product_id=product_id).all()
+    for order in orders:
+        db.session.delete(order)
     cart_items = Cart.query.filter_by(product_id=product_id).all()
     for item in cart_items:
         db.session.delete(item)

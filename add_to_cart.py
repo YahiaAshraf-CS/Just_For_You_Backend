@@ -10,9 +10,11 @@ def view_cart(user_id):
         result.append({
             "id": item.id,
             "product_id": item.product_id,
-            "product_name": item.product.name,
+            "name": item.product.name,
+            "description": item.product.description,
             "quantity": item.quantity,
             "price": item.product.price,
+            "image": item.product.image,
             "total": item.product.price * item.quantity
         })
     return jsonify(result), 200

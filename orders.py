@@ -46,6 +46,8 @@ def get_orders(user_id):
             "product_name": o.product.name,
             "quantity": o.quantity,
             "total_price": o.total_price,
-            "order_date": o.order_date
+            "order_date": o.order_date,
+            "user_id": o.user_id,
+            "user_name": o.user.firstName + " " + o.user.lastName
         })
     return jsonify(result), 200

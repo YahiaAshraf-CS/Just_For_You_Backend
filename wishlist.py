@@ -1,9 +1,8 @@
 from flask import Blueprint, request, jsonify
 from models import Product, User, Wishlist, db
+app = Blueprint("wishlist", __name__)
 
-wishlist_bp = Blueprint("wishlist", __name__)
-
-@wishlist_bp.route("/wishlist", methods=["POST"])
+@app.route("/wishlist", methods=["POST"])
 def add_to_wishlist():
     data = request.get_json()
 
@@ -44,7 +43,7 @@ def add_to_wishlist():
 
 
 
-@wishlist_bp.route("/wishlist/<int:user_id>", methods=["GET"])
+@app.route("/wishlist/<int:user_id>", methods=["GET"])
 def get_wishlist(user_id):
     wishlist_items = Wishlist.query.filter_by(user_id=user_id).all()
 
@@ -63,7 +62,7 @@ def get_wishlist(user_id):
 
 
 
-@wishlist_bp.route("/wishlist/<int:wishlist_id>", methods=["DELETE"])
+@app.route("/wishlist/<int:wishlist_id>", methods=["DELETE"])
 def remove_from_wishlist(wishlist_id):
     wishlist_item = Wishlist.query.get_or_404(wishlist_id)
 

@@ -36,7 +36,7 @@ class Cart(db.Model):
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=True)
     quantity = db.Column(db.Integer, nullable=False)
     total_price = db.Column(db.Float, nullable=False)
     order_date = db.Column(db.DateTime, server_default=db.func.now())
@@ -44,4 +44,15 @@ class Order(db.Model):
     product = db.relationship('Product', backref='orders')
     def __repr__(self):
         return f'<Order {self.id}>'
- 
+class Wishlist(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+
+    user = db.relationship('User', backref='wishlist_items')
+    product = db.relationship('Product', backref='wishlist_items')
+
+    def __repr__(self):
+        return f'<Wishlist {self.user_id} - {self.product_id}>'
+

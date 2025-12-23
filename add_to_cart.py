@@ -10,12 +10,44 @@ def view_cart(user_id):
         result.append({
             "id": item.id,
             "product_id": item.product_id,
-            "product_name": item.product.name,
+            "name": item.product.name,
+            "description": item.product.description,
             "quantity": item.quantity,
             "price": item.product.price,
+            "image": item.product.image,
             "total": item.product.price * item.quantity
         })
     return jsonify(result), 200
+ # increase quantity
+@app.route("/cart/<int:cart_id>", methods=["PATCH"])
+def increase_quantity(cart_id):
+    cart_item = Cart.query.get(cart_id)
+    if not cart_item:
+        return jsonify({"message": "Cart item not found"}), 404
+
+    cart_item.quantity += 1
+    db.session.commit()
+    return jsonify({"message": "Quantity increased"}), 200
+
+# decrease quantity
+# decrease quantity
+# ---------------------------------------------------------
+# FIX: Added "/decrease" to the URL to distinguish it from the increase function
+# ---------------------------------------------------------
+@app.route("/cart/<int:cart_id>/decrease", methods=["PATCH"]) 
+def decrease_quantity(cart_id):
+    cart_item = Cart.query.get(cart_id)
+    
+    if not cart_item:
+        return jsonify({"message": "Cart item not found"}), 404
+
+    if cart_item.quantity > 1:
+        cart_item.quantity -= 1
+    else:
+        db.session.delete(cart_item)
+        
+    db.session.commit()
+    return jsonify({"message": "Quantity decreased"}), 200
 
 @app.route("/cart", methods=["POST"])
 def add_to_cart():

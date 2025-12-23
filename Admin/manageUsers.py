@@ -13,7 +13,6 @@ def get_users():
         "number": user.number,
         "email": user.email,
         "is_admin": user.is_admin
-        "is_admin": user.is_admin
     } for user in users]
     return jsonify({"status": "success", "users": users_list}), 200
 @app.route("/users/<int:user_id>", methods=["DELETE"])

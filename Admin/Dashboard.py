@@ -105,7 +105,7 @@ def add_product():
 
             # 3. Create the URL to be stored in the database
             # This allows the React frontend to load the image via a URL
-            image_url = f"http://127.0.0.1:5000/static/products/{filename}"
+            image_url = f"https://justforyoubackend-production.up.railway.app/static/products/{filename}"
 
             # --- DATABASE LOGIC HERE ---
             new_product = Product(

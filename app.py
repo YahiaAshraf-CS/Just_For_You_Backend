@@ -9,6 +9,7 @@ from product import app as product_app
 from wishlist import app as wishlist_app
 from orders import app as orders_app
 from models import db
+import os
 app = Flask(__name__)
 CORS(app)
 print(f"Instance path: {app.instance_path}")
@@ -34,4 +35,5 @@ def instance():
     return app.instance_path
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
